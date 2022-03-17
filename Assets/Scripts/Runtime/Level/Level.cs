@@ -10,12 +10,15 @@ namespace Platformer
     {
         [SerializeField] private int totalRows = 10;
         [SerializeField] private int totalColumns = 25;
+        [SerializeField] private GameObject[] levelPieces;
 
         public const int GRID_SIZE = 1;
 
         private readonly Color normalColor = Color.gray;
         private readonly Color selectColor = Color.yellow;
 
+        
+            
         #region Singletone
 
         private static Level instance;
@@ -45,6 +48,12 @@ namespace Platformer
         {
             get => totalColumns;
             set => totalColumns = value;
+        }
+
+        public GameObject[] LevelPieces
+        {
+            get => levelPieces;
+            set => levelPieces = value;
         }
 
 
