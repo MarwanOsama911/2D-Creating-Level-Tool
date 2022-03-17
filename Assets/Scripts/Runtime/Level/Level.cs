@@ -16,6 +16,25 @@ namespace Platformer
         private readonly Color normalColor = Color.gray;
         private readonly Color selectColor = Color.yellow;
 
+        #region Singletone
+
+        private static Level instance;
+
+        public static Level Instance
+        {
+            get
+            {
+                if (instance == null)
+                {
+                    instance = FindObjectOfType<Level>();
+                }
+
+                return instance;
+            }
+        }
+
+        #endregion
+
         public int TotalRows
         {
             get => totalRows;
@@ -27,6 +46,7 @@ namespace Platformer
             get => totalColumns;
             set => totalColumns = value;
         }
+
 
         private void GridFrameGizmos(int cols, int rows)
         {
@@ -75,6 +95,35 @@ namespace Platformer
 
             Gizmos.color = oldColor;
             Gizmos.matrix = oldMatrix;
+        }
+
+        public Vector3 WorldToGridCoordinates(Vector3 point)
+        {
+            var gridPoint = new Vector3((int) ((point.x - transform.position.x) / GRID_SIZE),
+                (int) ((point.y - transform.position.y) / GRID_SIZE), 0f);
+            return gridPoint;
+        }
+
+        public Vector3 GridToWorldCoordinates(int cols, int rows)
+        {
+            var worldPoint = new Vector3(transform.position.x + (cols * GRID_SIZE + GRID_SIZE / 2f),
+                transform.position.y + (rows * GRID_SIZE + GRID_SIZE / 2f), 0f);
+            return worldPoint;
+        }
+
+        public bool IsInsideGridBounds(Vector3 point)
+        {
+            var minX = transform.position.x;
+            var maxX = minX + TotalColumns * GRID_SIZE;
+            var minY = transform.position.y;
+            var maxY = minY + TotalRows * GRID_SIZE;
+
+            return (point.x >= minX && point.x <= maxX && point.y >= minY && point.y <= maxY);
+        }
+
+        public bool IsInsideGridBounds(int col, int row)
+        {
+            return (col >= 0 && col <= TotalColumns && row >= 0 && row <= TotalRows);
         }
     }
 }
