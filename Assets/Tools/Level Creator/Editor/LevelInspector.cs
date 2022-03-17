@@ -37,29 +37,40 @@ public class LevelInspector : Editor
     private void DrawLevelSizeGUI()
     {
         EditorGUILayout.LabelField("Size", EditorStyles.boldLabel);
-        newTotalColumns = EditorGUILayout.IntField("Columns", Mathf.Max(1, newTotalColumns));
-        newTotalRows = EditorGUILayout.IntField("Rows", Mathf.Max(1, newTotalRows));
-
-        var oldEnabled = GUI.enabled;
-        GUI.enabled = (newTotalColumns != myTarget.TotalColumns || newTotalRows != myTarget.TotalRows);
-
-        var buttonResize = GUILayout.Button("Resize", GUILayout.Height(2 * EditorGUIUtility.singleLineHeight));
-        if (buttonResize)
+        EditorGUILayout.BeginHorizontal("Box");
         {
-            if (EditorUtility.DisplayDialog("Level Creator",
-                "Are you sure, you want to resize the level?\nthis action cannot be undone!", "Yes", "No"))
+            EditorGUILayout.BeginVertical();
             {
-                ResizeLevel();
+                newTotalColumns = EditorGUILayout.IntField("Columns", Mathf.Max(1, newTotalColumns));
+                newTotalRows = EditorGUILayout.IntField("Rows", Mathf.Max(1, newTotalRows));
             }
-        }
+            EditorGUILayout.EndVertical();
+            EditorGUILayout.BeginVertical();
+            {
+                var oldEnabled = GUI.enabled;
+                GUI.enabled = (newTotalColumns != myTarget.TotalColumns || newTotalRows != myTarget.TotalRows);
 
-        var buttonRest = GUILayout.Button("Rest");
-        if (buttonRest)
-        {
-            ResetResizeValues();
-        }
+                var buttonResize = GUILayout.Button("Resize", GUILayout.Height(2 * EditorGUIUtility.singleLineHeight));
+                if (buttonResize)
+                {
+                    if (EditorUtility.DisplayDialog("Level Creator",
+                        "Are you sure, you want to resize the level?\nthis action cannot be undone!", "Yes", "No"))
+                    {
+                        ResizeLevel();
+                    }
+                }
 
-        GUI.enabled = oldEnabled;
+                var buttonRest = GUILayout.Button("Rest");
+                if (buttonRest)
+                {
+                    ResetResizeValues();
+                }
+
+                GUI.enabled = oldEnabled;
+            }
+            EditorGUILayout.EndVertical();
+        }
+        EditorGUILayout.EndHorizontal();
     }
 
 
