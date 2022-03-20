@@ -8,6 +8,7 @@ namespace Platformer
 {
     public class Level : MonoBehaviour
     {
+        
         [SerializeField] private int totalRows = 10;
         [SerializeField] private int totalColumns = 25;
         [SerializeField] private GameObject[] levelPieces;

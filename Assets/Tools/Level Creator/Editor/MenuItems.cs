@@ -7,10 +7,16 @@ namespace LevelCreatorToolEditor
 {
     public static class MenuItems
     {
-        [MenuItem("Tool/Level Creator/New Level Scene")]
+        [MenuItem("Tools/Level Creator/New Level Scene")]
         public static void NewLevel()
         {
             EditorUtils.NewLevel();
+        }
+
+        [MenuItem("Tools/Level Creator/Show Palette #P")]
+        public static void ShowPalette()
+        {
+            PaletteWindow.ShowPalette();
         }
     }
 }
