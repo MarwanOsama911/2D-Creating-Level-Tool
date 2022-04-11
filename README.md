@@ -6,10 +6,10 @@ This is a tool -Side Project- to facilitate creating the level for 2D games with
 ## Description
 
 I made this tool in terms of facilitating:
-1- you can create new levels directly through it with the level some configuration.
-2- you can resize the level and the tool responsible for deleting what is outside the level boundary.
-3- you have multiple modes for editing the level.
-4- you can use a palette window to create new level pieces with categories for them.
+* you can create new levels directly through it with the level some configuration.
+* you can resize the level and the tool responsible for deleting what is outside the level boundary.
+* you have multiple modes for editing the level.
+* you can use a palette window to create new level pieces with categories for them.
 
 
 ## Getting Started
