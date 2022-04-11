@@ -9,6 +9,10 @@ public class PaletteWindow : EditorWindow
 {
     public static PaletteWindow Instance;
 
+    public delegate void ItemSelectedDelegate(PaletteItem item, Texture2D preview);
+    public static event ItemSelectedDelegate ItemSelectedEvent;
+
+
     private List<PaletteItem.Category> categories;
     private List<string> categoryLabels;
     private PaletteItem.Category categorySelected;
@@ -94,9 +98,9 @@ public class PaletteWindow : EditorWindow
     {
         foreach (PaletteItem item in _items)
         {
-            if (!_previews.ContainsKey(item)) ;
+            if (!_previews.ContainsKey(item))
             {
-                Texture2D preview = AssetPreview.GetAssetPreview(item.gameObject);
+                var preview = AssetPreview.GetAssetPreview(item.gameObject);
                 if (preview != null)
                     _previews.Add(item, preview);
             }
@@ -109,6 +113,9 @@ public class PaletteWindow : EditorWindow
         {
             var selectedItem = _categorizedItems[categorySelected][index];
             Debug.Log("Selected Item is : " + selectedItem.itemName);
+
+            if (ItemSelectedEvent != null)
+                ItemSelectedEvent.Invoke(selectedItem, _previews[selectedItem]);
         }
     }
 
