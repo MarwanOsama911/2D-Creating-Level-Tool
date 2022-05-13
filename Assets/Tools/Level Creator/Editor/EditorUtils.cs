@@ -1,10 +1,10 @@
 using UnityEngine;
 using UnityEditor;
 using System.Collections.Generic;
-using Platformer;
+using Tools.LevelCreator.Runtime;
 using UnityEditor.SceneManagement;
 
-namespace LevelCreatorToolEditor
+namespace Tools.LevelCreator.Editor
 {
     public static class EditorUtils
     {

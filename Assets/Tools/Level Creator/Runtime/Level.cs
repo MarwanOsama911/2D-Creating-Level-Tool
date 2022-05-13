@@ -1,10 +1,6 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor.UI;
 using UnityEngine;
 
-namespace Platformer
+namespace Tools.LevelCreator.Runtime
 {
     public class Level : MonoBehaviour
     {

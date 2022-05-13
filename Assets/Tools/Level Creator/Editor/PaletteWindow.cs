@@ -1,159 +1,160 @@
-using System;
+using System.Collections.Generic;
+using Tools.LevelCreator.Editor;
 using UnityEditor;
 using UnityEngine;
-using System.Collections.Generic;
-using LevelCreatorToolEditor;
 
-
-public class PaletteWindow : EditorWindow
+namespace Tools.LevelCreator.Editor
 {
-    public static PaletteWindow Instance;
-
-    public delegate void ItemSelectedDelegate(PaletteItem item, Texture2D preview);
-    public static event ItemSelectedDelegate ItemSelectedEvent;
-
-
-    private List<PaletteItem.Category> categories;
-    private List<string> categoryLabels;
-    private PaletteItem.Category categorySelected;
-
-
-    private string path = "Assets/Prefabs/Level Pieces";
-    private List<PaletteItem> _items;
-    private Dictionary<PaletteItem.Category, List<PaletteItem>> _categorizedItems;
-    private Dictionary<PaletteItem, Texture2D> _previews;
-    private Vector2 _scrollPosition;
-
-    private const float BUTTON_WIDTH = 80f;
-    private const float BUTTON_HIGHT = 90f;
-
-
-    private void OnEnable()
+    public class PaletteWindow : EditorWindow
     {
-        if (categories == null)
-            InitCategories();
-        if (_categorizedItems == null)
-            InitContent();
-    }
+        public static PaletteWindow Instance;
 
-    private void OnGUI()
-    {
-        DrawTabs();
-        DrawScroll();
-    }
+        public delegate void ItemSelectedDelegate(PaletteItem item, Texture2D preview);
+        public static event ItemSelectedDelegate ItemSelectedEvent;
 
-    public static void ShowPalette()
-    {
-        Instance = (PaletteWindow) EditorWindow.GetWindow<PaletteWindow>();
-        Instance.titleContent = new GUIContent("Palette");
-    }
 
-    private void InitContent()
-    {
-        _items = EditorUtils.GetAssetsWithScript<PaletteItem>(path);
-        _categorizedItems = new Dictionary<PaletteItem.Category, List<PaletteItem>>();
-        _previews = new Dictionary<PaletteItem, Texture2D>();
+        private List<PaletteItem.Category> categories;
+        private List<string> categoryLabels;
+        private PaletteItem.Category categorySelected;
 
-        foreach (PaletteItem.Category category in categories)
-            _categorizedItems.Add(category, new List<PaletteItem>());
 
-        foreach (PaletteItem item in _items)
-            _categorizedItems[item.category].Add(item);
-    }
+        private string path = "Assets/Prefabs/Level Pieces";
+        private List<PaletteItem> _items;
+        private Dictionary<PaletteItem.Category, List<PaletteItem>> _categorizedItems;
+        private Dictionary<PaletteItem, Texture2D> _previews;
+        private Vector2 _scrollPosition;
 
-    private void InitCategories()
-    {
-        categories = EditorUtils.GetListFromEnum<PaletteItem.Category>();
-        categoryLabels = new List<string>();
-        foreach (var item in categories)
-            categoryLabels.Add(item.ToString());
-    }
+        private const float BUTTON_WIDTH = 80f;
+        private const float BUTTON_HIGHT = 90f;
 
-    private void DrawTabs()
-    {
-        var index = (int) categorySelected;
-        index = GUILayout.Toolbar(index, categoryLabels.ToArray());
-        categorySelected = categories[index];
-    }
 
-    private void DrawScroll()
-    {
-        if (_categorizedItems[categorySelected].Count == 0)
+        private void OnEnable()
         {
-            EditorGUILayout.HelpBox("This Category is empty!!", MessageType.Info);
-            return;
+            if (categories == null)
+                InitCategories();
+            if (_categorizedItems == null)
+                InitContent();
         }
 
-        var rowCapacity = Mathf.FloorToInt(position.width / (BUTTON_WIDTH));
-        _scrollPosition = GUILayout.BeginScrollView(_scrollPosition);
-
-        var selectionGridIndex = -1;
-        selectionGridIndex = GUILayout.SelectionGrid(selectionGridIndex, GetGUIContentsFromItems(),
-            rowCapacity, GetGUIStyle());
-        GetSelectedItem(selectionGridIndex);
-        GUILayout.EndScrollView();
-    }
-
-    private void GeneratePreview()
-    {
-        foreach (PaletteItem item in _items)
+        private void OnGUI()
         {
-            if (!_previews.ContainsKey(item))
+            DrawTabs();
+            DrawScroll();
+        }
+
+        public static void ShowPalette()
+        {
+            Instance = (PaletteWindow) EditorWindow.GetWindow<PaletteWindow>();
+            Instance.titleContent = new GUIContent("Palette");
+        }
+
+        private void InitContent()
+        {
+            _items = EditorUtils.GetAssetsWithScript<PaletteItem>(path);
+            _categorizedItems = new Dictionary<PaletteItem.Category, List<PaletteItem>>();
+            _previews = new Dictionary<PaletteItem, Texture2D>();
+
+            foreach (PaletteItem.Category category in categories)
+                _categorizedItems.Add(category, new List<PaletteItem>());
+
+            foreach (PaletteItem item in _items)
+                _categorizedItems[item.category].Add(item);
+        }
+
+        private void InitCategories()
+        {
+            categories = EditorUtils.GetListFromEnum<PaletteItem.Category>();
+            categoryLabels = new List<string>();
+            foreach (var item in categories)
+                categoryLabels.Add(item.ToString());
+        }
+
+        private void DrawTabs()
+        {
+            var index = (int) categorySelected;
+            index = GUILayout.Toolbar(index, categoryLabels.ToArray());
+            categorySelected = categories[index];
+        }
+
+        private void DrawScroll()
+        {
+            if (_categorizedItems[categorySelected].Count == 0)
             {
-                var preview = AssetPreview.GetAssetPreview(item.gameObject);
-                if (preview != null)
-                    _previews.Add(item, preview);
+                EditorGUILayout.HelpBox("This Category is empty!!", MessageType.Info);
+                return;
             }
+
+            var rowCapacity = Mathf.FloorToInt(position.width / (BUTTON_WIDTH));
+            _scrollPosition = GUILayout.BeginScrollView(_scrollPosition);
+
+            var selectionGridIndex = -1;
+            selectionGridIndex = GUILayout.SelectionGrid(selectionGridIndex, GetGUIContentsFromItems(),
+                rowCapacity, GetGUIStyle());
+            GetSelectedItem(selectionGridIndex);
+            GUILayout.EndScrollView();
         }
-    }
 
-    private void GetSelectedItem(int index)
-    {
-        if (index != -1)
+        private void GeneratePreview()
         {
-            var selectedItem = _categorizedItems[categorySelected][index];
-            Debug.Log("Selected Item is : " + selectedItem.itemName);
-
-            if (ItemSelectedEvent != null)
-                ItemSelectedEvent.Invoke(selectedItem, _previews[selectedItem]);
-        }
-    }
-
-    private GUIStyle GetGUIStyle()
-    {
-        var guiStyle = new GUIStyle(GUI.skin.button);
-        guiStyle.alignment = TextAnchor.LowerCenter;
-        guiStyle.imagePosition = ImagePosition.ImageAbove;
-        guiStyle.fixedWidth = BUTTON_WIDTH;
-        guiStyle.fixedHeight = BUTTON_HIGHT;
-
-        return guiStyle;
-    }
-
-    private GUIContent[] GetGUIContentsFromItems()
-    {
-        var guiContents = new List<GUIContent>();
-        if (_previews.Count == _items.Count)
-        {
-            var totalItems = _categorizedItems[categorySelected].Count;
-            for (var i = 0; i < totalItems; i++)
+            foreach (PaletteItem item in _items)
             {
-                var guiContent = new GUIContent
+                if (!_previews.ContainsKey(item))
                 {
-                    text = _categorizedItems[categorySelected][i].itemName,
-                    image = _previews[_categorizedItems[categorySelected][i]]
-                };
-                guiContents.Add(guiContent);
+                    var preview = AssetPreview.GetAssetPreview(item.gameObject);
+                    if (preview != null)
+                        _previews.Add(item, preview);
+                }
             }
         }
 
-        return guiContents.ToArray();
-    }
+        private void GetSelectedItem(int index)
+        {
+            if (index != -1)
+            {
+                var selectedItem = _categorizedItems[categorySelected][index];
+                Debug.Log("Selected Item is : " + selectedItem.itemName);
+
+                if (ItemSelectedEvent != null)
+                    ItemSelectedEvent.Invoke(selectedItem, _previews[selectedItem]);
+            }
+        }
+
+        private GUIStyle GetGUIStyle()
+        {
+            var guiStyle = new GUIStyle(GUI.skin.button);
+            guiStyle.alignment = TextAnchor.LowerCenter;
+            guiStyle.imagePosition = ImagePosition.ImageAbove;
+            guiStyle.fixedWidth = BUTTON_WIDTH;
+            guiStyle.fixedHeight = BUTTON_HIGHT;
+
+            return guiStyle;
+        }
+
+        private GUIContent[] GetGUIContentsFromItems()
+        {
+            var guiContents = new List<GUIContent>();
+            if (_previews.Count == _items.Count)
+            {
+                var totalItems = _categorizedItems[categorySelected].Count;
+                for (var i = 0; i < totalItems; i++)
+                {
+                    var guiContent = new GUIContent
+                    {
+                        text = _categorizedItems[categorySelected][i].itemName,
+                        image = _previews[_categorizedItems[categorySelected][i]]
+                    };
+                    guiContents.Add(guiContent);
+                }
+            }
+
+            return guiContents.ToArray();
+        }
 
 
-    private void Update()
-    {
-        if (_previews.Count != _items.Count)
-            GeneratePreview();
+        private void Update()
+        {
+            if (_previews.Count != _items.Count)
+                GeneratePreview();
+        }
     }
 }

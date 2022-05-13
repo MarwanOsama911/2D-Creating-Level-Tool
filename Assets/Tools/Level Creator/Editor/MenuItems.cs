@@ -1,9 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEditor;
-using UnityEngine;
 
-namespace LevelCreatorToolEditor
+namespace Tools.LevelCreator.Editor
 {
     public static class MenuItems
     {
