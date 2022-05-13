@@ -32,7 +32,7 @@ public class LevelInspector : Editor
 
     private void OnEnable()
     {
-        myTarget = (Level) target;
+        myTarget = (Level)target;
         InitLevel();
         ResetResizeValues();
         SubscribeEvents();
@@ -85,8 +85,8 @@ public class LevelInspector : Editor
         var worldPos = camera.ScreenToWorldPoint(mousePosition);
         var gridPos = myTarget.WorldToGridCoordinates(worldPos);
 
-        var col = (int) gridPos.x;
-        var row = (int) gridPos.y;
+        var col = (int)gridPos.x;
+        var row = (int)gridPos.y;
 
         switch (currentMode)
         {
@@ -135,7 +135,7 @@ public class LevelInspector : Editor
         if (myTarget.LevelPieces[col + row * myTarget.TotalColumns] != null)
             DestroyImmediate(myTarget.LevelPieces[col + row * myTarget.TotalColumns]);
 
-        var obj = PrefabUtility.InstantiatePrefab(pieceSelected) as GameObject;
+        var obj = (GameObject)PrefabUtility.InstantiatePrefab(pieceSelected);
         obj.transform.parent = myTarget.transform;
         obj.name = $"[{col},{row},{obj.name}]";
         obj.transform.position = myTarget.GridToWorldCoordinates(col, row);
@@ -165,8 +165,8 @@ public class LevelInspector : Editor
     {
         var gridPoint = myTarget.WorldToGridCoordinates(itemInspected.transform.position);
 
-        var col = (int) gridPoint.x;
-        var row = (int) gridPoint.y;
+        var col = (int)gridPoint.x;
+        var row = (int)gridPoint.y;
 
         if (col == originalPosX && row == originalPosY)
             return;
@@ -217,7 +217,7 @@ public class LevelInspector : Editor
         {
             GUILayout.BeginArea(new Rect(10f, 10f, 340f, 40f));
             {
-                selectedMode = (Mode) GUILayout.Toolbar((int) currentMode, modeLabels.ToArray(),
+                selectedMode = (Mode)GUILayout.Toolbar((int)currentMode, modeLabels.ToArray(),
                     GUILayout.ExpandHeight(true));
             }
             GUILayout.EndArea();
@@ -298,7 +298,7 @@ public class LevelInspector : Editor
                 if (buttonResize)
                 {
                     if (EditorUtility.DisplayDialog("Level Creator",
-                        "Are you sure, you want to resize the level?\nthis action cannot be undone!", "Yes", "No"))
+                            "Are you sure, you want to resize the level?\nthis action cannot be undone!", "Yes", "No"))
                     {
                         ResizeLevel();
                     }

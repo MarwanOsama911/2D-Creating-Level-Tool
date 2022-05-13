@@ -8,7 +8,6 @@ namespace Platformer
 {
     public class Level : MonoBehaviour
     {
-        
         [SerializeField] private int totalRows = 10;
         [SerializeField] private int totalColumns = 25;
         [SerializeField] private GameObject[] levelPieces;
@@ -18,8 +17,7 @@ namespace Platformer
         private readonly Color normalColor = Color.gray;
         private readonly Color selectColor = Color.yellow;
 
-        
-            
+
         #region Singletone
 
         private static Level instance;
@@ -109,8 +107,8 @@ namespace Platformer
 
         public Vector3 WorldToGridCoordinates(Vector3 point)
         {
-            var gridPoint = new Vector3((int) ((point.x - transform.position.x) / GRID_SIZE),
-                (int) ((point.y - transform.position.y) / GRID_SIZE), 0f);
+            var gridPoint = new Vector3((int)((point.x - transform.position.x) / GRID_SIZE),
+                (int)((point.y - transform.position.y) / GRID_SIZE), 0f);
             return gridPoint;
         }
 
@@ -133,7 +131,7 @@ namespace Platformer
 
         public bool IsInsideGridBounds(int col, int row)
         {
-            return (col >= 0 && col <= TotalColumns && row >= 0 && row <= TotalRows);
+            return (col >= 0 && col <= TotalColumns - 1 && row >= 0 && row <= TotalRows - 1);
         }
     }
 }
