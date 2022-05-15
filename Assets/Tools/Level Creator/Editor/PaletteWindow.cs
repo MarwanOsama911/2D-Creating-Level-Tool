@@ -112,7 +112,7 @@ namespace Tools.LevelCreator.Editor
             if (index != -1)
             {
                 var selectedItem = _categorizedItems[categorySelected][index];
-                Debug.Log("Selected Item is : " + selectedItem.itemName);
+                // Debug.Log("Selected Item is : " + selectedItem.itemName);
 
                 if (ItemSelectedEvent != null)
                     ItemSelectedEvent.Invoke(selectedItem, _previews[selectedItem]);
