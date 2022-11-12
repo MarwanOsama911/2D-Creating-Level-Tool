@@ -11,9 +11,13 @@ I made this tool in terms of facilitating:
 * you have multiple modes for editing the level.
 * you can use a palette window to create new level pieces with categories for them.
 
+
 ## [Demo Video](https://youtu.be/C7QeO0dusns)
 
+
 ## [Playlist Tutorials Videos](https://youtube.com/playlist?list=PL1c6Q9q5NIViB9i0FmERzEFvE85Fc8cmp)
+
+
 
 ## Getting Started
 
