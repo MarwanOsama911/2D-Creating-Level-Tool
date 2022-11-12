@@ -14,6 +14,9 @@ I made this tool in terms of facilitating:
 ## Demo Video
 https://youtu.be/C7QeO0dusns
 
+## Playlist Tutorials Videos
+[Tutorail](https://youtube.com/playlist?list=PL1c6Q9q5NIViB9i0FmERzEFvE85Fc8cmp)
+
 ## Getting Started
 
 ### Dependencies
